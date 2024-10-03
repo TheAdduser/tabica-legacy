@@ -1,82 +1,94 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model comment {
+  com_id         Int      @id @default(autoincrement())
+  com_task_id    Int
+  com_content    String   @db.VarChar(2000)
+  com_created_by Int
+  com_created_on DateTime @db.DateTime(0)
+  task           task     @relation(fields: [com_task_id], references: [tsk_id], onUpdate: Restrict, map: "comment_task_tsk_id_fk")
+  user           user     @relation(fields: [com_created_by], references: [usr_id], onUpdate: Restrict, map: "comment_user_usr_id_fk")
 
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
+  @@index([com_task_id], map: "comment_task_tsk_id_fk")
+  @@index([com_created_by], map: "comment_user_usr_id_fk")
 }
 
-// Necessary for Next auth
-model Account {
-    id                       String  @id @default(cuid())
-    userId                   String
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
-    expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String? // @db.Text
-    session_state            String?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    refresh_token_expires_in Int?
+model profile_picture {
+  pic_id         Int       @id
+  pic_user_id    Int
+  pic_filename   String?   @db.VarChar(50)
+  pic_filetype   String?   @db.VarChar(5)
+  pic_updated_on DateTime? @db.DateTime(0)
+  user           user      @relation(fields: [pic_user_id], references: [usr_id], onUpdate: Restrict, map: "user_picture_user_usr_id_fk")
 
-    @@unique([provider, providerAccountId])
+  @@index([pic_user_id], map: "user_picture_user_usr_id_fk")
 }
 
-model Session {
-    id           String   @id @default(cuid())
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model project {
+  proj_id          Int      @id @default(autoincrement())
+  proj_name        String   @db.VarChar(30)
+  proj_created_on  DateTime @db.DateTime(0)
+  proj_modified_on DateTime @db.DateTime(0)
+  proj_created_by  Int
+  proj_is_active   Boolean
+  user             user     @relation(fields: [proj_created_by], references: [usr_id], onUpdate: Restrict, map: "project_user_usr_id_fk")
+  status           status[]
+  task             task[]
+
+  @@index([proj_created_by], map: "project_user_usr_id_fk")
 }
 
-model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    posts         Post[]
-    project Projects[]
+model status {
+  stat_id         Int      @id
+  stat_name       String   @db.VarChar(100)
+  stat_order      Int
+  stat_project_id Int?
+  project         project? @relation(fields: [stat_project_id], references: [proj_id], onDelete: Restrict, onUpdate: Restrict, map: "task_status_project_proj_id_fk")
+  task            task[]
+
+  @@index([stat_project_id], map: "task_status_project_proj_id_fk")
 }
 
-model VerificationToken {
-    identifier String
-    token      String   @unique
-    expires    DateTime
+model task {
+  tsk_id                      Int       @id @default(autoincrement())
+  tsk_name                    String    @db.VarChar(100)
+  tsk_project_id              Int
+  tsk_status_id               Int
+  tsk_due_time_date           DateTime? @db.DateTime(0)
+  tsk_is_time_defined_by_user Boolean
+  tsk_created_on              DateTime  @db.DateTime(0)
+  tsk_modified_on             DateTime? @db.DateTime(0)
+  tsk_complete_on             DateTime? @db.DateTime(0)
+  tsk_created_by              Int
+  tsk_is_active               Boolean
+  comment                     comment[]
+  project                     project   @relation(fields: [tsk_project_id], references: [proj_id], onUpdate: Restrict, map: "task_project_proj_id_fk")
+  status                      status    @relation(fields: [tsk_status_id], references: [stat_id], onUpdate: Restrict, map: "task_status_stat_id_fk")
+  user                        user      @relation(fields: [tsk_created_by], references: [usr_id], onUpdate: Restrict, map: "task_user_usr_id_fk")
 
-    @@unique([identifier, token])
+  @@index([tsk_project_id], map: "task_project_proj_id_fk")
+  @@index([tsk_status_id], map: "task_status_stat_id_fk")
+  @@index([tsk_created_by], map: "task_user_usr_id_fk")
 }
 
-model Projects {
-    id        String     @id @default(cuid())
-    name      String?
-    ownerId   String
-    owner User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+model user {
+  usr_id            Int               @id
+  usr_name          String            @db.VarChar(30)
+  usr_username      String            @db.VarChar(30)
+  usr_password      String            @db.VarChar(35)
+  usr_email         String            @db.VarChar(30)
+  usr_creation_date DateTime          @db.DateTime(0)
+  usr_last_login    DateTime          @db.DateTime(0)
+  usr_is_active     DateTime          @db.DateTime(0)
+  comment           comment[]
+  profile_picture   profile_picture[]
+  project           project[]
+  task              task[]
 }
