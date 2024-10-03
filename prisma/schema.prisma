@@ -50,6 +50,7 @@ model status {
   stat_name       String   @db.VarChar(100)
   stat_order      Int
   stat_project_id Int?
+  stat_is_last    Boolean
   project         project? @relation(fields: [stat_project_id], references: [proj_id], onDelete: Restrict, onUpdate: Restrict, map: "task_status_project_proj_id_fk")
   task            task[]
 
