@@ -1,8 +1,8 @@
 import React from "react";
-import Header from "../_components/Header";
-import Sidebar from "../_components/Sidebar";
-import KanbanBoard from "../_components/KanbanBoard";
-import Footer from "../_components/Footer";
+import Header from "./_components/Header";
+import Sidebar from "./_components/Sidebar";
+import KanbanBoard from "./_components/KanbanBoard";
+import Footer from "./_components/Footer";
 
 const Home: React.FC =(props) => {
   return(
