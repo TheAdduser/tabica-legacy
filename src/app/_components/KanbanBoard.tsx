@@ -7,7 +7,7 @@ const KanbanBoard: React.FC = () => {
   const doneTasks = ['Task 4'];
 
   return(
-    <main className="glex-grow p-4">
+    <main className="glex-grow p-5">
       <div className="flex slace-x-4">
         <TaskColumn title="To Do" tasks={todoTasks} />
         <TaskColumn title="In Progress" tasks={inProgressTasks} />

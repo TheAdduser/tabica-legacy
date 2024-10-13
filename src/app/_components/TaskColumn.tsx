@@ -8,7 +8,7 @@ interface TaskColumnProps {
 
 const TaskColumn: React.FC<TaskColumnProps> = ({ title, tasks}) => {
   return (
-    <div className="bg-gray-800 w-full p-4 rounded whadow">
+    <div className="bg-gray-800 w-full p-4 m-2 rounded whadow">
       <h3 className="font-bold b-2 text-[#28E586]">{title}</h3>
       {tasks.map((task,index) => (
         <Task key={index} title={task} />
