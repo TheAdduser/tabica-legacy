@@ -4,6 +4,7 @@ import Sidebar from "./_components/Sidebar";
 import KanbanBoard from "./_components/KanbanBoard";
 import Footer from "./_components/Footer";
 
+
 const Home: React.FC =(props) => {
   return(
     <div className="flex flex-col h-screen bg-gray-900">
