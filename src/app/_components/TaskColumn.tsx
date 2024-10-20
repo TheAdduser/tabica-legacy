@@ -1,5 +1,7 @@
 import React from "react";
 import Task from "./Task";
+import { ScrollArea, ScrollBar } from "./ui/scroll-area"
+
 
 interface TaskColumnProps {
   title: string;
@@ -9,11 +11,13 @@ interface TaskColumnProps {
 const TaskColumn: React.FC<TaskColumnProps> = ({ title, tasks}) => {
   return (
     <div className="bg-gray-800 w-full p-4 m-2 rounded whadow">
-      <h3 className="font-bold b-2 text-[#28E586]">{title}</h3>
+      <h3 className="font-bold b-2 text-[#28E586] mb-2">{title}</h3>
+      <ScrollArea>
       {tasks.map((task,index) => (
         <Task key={index} title={task} />
       ))}
-      <button className="mt-4 bg-[#28E586] text-gray-900 w-full py-2 rounded"> Add Task </button>
+      <ScrollBar orientation="vertical"/>
+      </ScrollArea>
     </div>
   );
 };
