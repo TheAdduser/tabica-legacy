@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Post {
+  id          Int      @id @default(autoincrement())
+  name        String
+  createdById Int
+  createdAt   DateTime @default(now())
+  user        user     @relation(fields: [createdById], references: [usr_id])
+}
 model comment {
   com_id         Int      @id @default(autoincrement())
   com_task_id    Int
@@ -82,7 +89,7 @@ model task {
 model user {
   usr_id            Int               @id
   usr_name          String            @db.VarChar(30)
-  usr_username      String            @db.VarChar(30)
+  usr_username      String            @db.VarChar(30)@unique
   usr_password      String            @db.VarChar(35)
   usr_email         String            @db.VarChar(30)
   usr_creation_date DateTime          @db.DateTime(0)
@@ -92,4 +99,5 @@ model user {
   profile_picture   profile_picture[]
   project           project[]
   task              task[]
+  post              Post[]
 }
