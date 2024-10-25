@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -17,11 +17,11 @@ model Post {
 model comment {
   com_id         Int      @id @default(autoincrement())
   com_task_id    Int
-  com_content    String   @db.VarChar(2000)
+  com_content    String   
   com_created_by Int
-  com_created_on DateTime @db.DateTime(0)
-  task           task     @relation(fields: [com_task_id], references: [tsk_id], onUpdate: Restrict, map: "comment_task_tsk_id_fk")
-  user           user     @relation(fields: [com_created_by], references: [usr_id], onUpdate: Restrict, map: "comment_user_usr_id_fk")
+  com_created_on DateTime @default(now())
+  task           task     @relation(fields: [com_task_id], references: [tsk_id], onUpdate: Restrict)
+  user           user     @relation(fields: [com_created_by], references: [usr_id], onUpdate: Restrict)
 
   @@index([com_task_id], map: "comment_task_tsk_id_fk")
   @@index([com_created_by], map: "comment_user_usr_id_fk")
@@ -30,22 +30,22 @@ model comment {
 model profile_picture {
   pic_id         Int       @id
   pic_user_id    Int
-  pic_filename   String?   @db.VarChar(50)
-  pic_filetype   String?   @db.VarChar(5)
-  pic_updated_on DateTime? @db.DateTime(0)
-  user           user      @relation(fields: [pic_user_id], references: [usr_id], onUpdate: Restrict, map: "user_picture_user_usr_id_fk")
+  pic_filename   String?   
+  pic_filetype   String?   
+  pic_updated_on DateTime? @default(now())
+  user           user      @relation(fields: [pic_user_id], references: [usr_id], onUpdate: Restrict)
 
   @@index([pic_user_id], map: "user_picture_user_usr_id_fk")
 }
 
 model project {
   proj_id          Int      @id @default(autoincrement())
-  proj_name        String   @db.VarChar(30)
-  proj_created_on  DateTime @db.DateTime(0)
-  proj_modified_on DateTime @db.DateTime(0)
+  proj_name        String   
+  proj_created_on  DateTime @default(now())
+  proj_modified_on DateTime @default(now())
   proj_created_by  Int
   proj_is_active   Boolean
-  user             user     @relation(fields: [proj_created_by], references: [usr_id], onUpdate: Restrict, map: "project_user_usr_id_fk")
+  user             user     @relation(fields: [proj_created_by], references: [usr_id], onUpdate: Restrict)
   status           status[]
   task             task[]
 
@@ -54,11 +54,11 @@ model project {
 
 model status {
   stat_id         Int      @id
-  stat_name       String   @db.VarChar(100)
+  stat_name       String   
   stat_order      Int
   stat_project_id Int?
   stat_is_last    Boolean
-  project         project? @relation(fields: [stat_project_id], references: [proj_id], onDelete: Restrict, onUpdate: Restrict, map: "task_status_project_proj_id_fk")
+  project         project? @relation(fields: [stat_project_id], references: [proj_id], onDelete: Restrict, onUpdate: Restrict)
   task            task[]
 
   @@index([stat_project_id], map: "task_status_project_proj_id_fk")
@@ -66,20 +66,20 @@ model status {
 
 model task {
   tsk_id                      Int       @id @default(autoincrement())
-  tsk_name                    String    @db.VarChar(100)
+  tsk_name                    String    
   tsk_project_id              Int
   tsk_status_id               Int
-  tsk_due_time_date           DateTime? @db.DateTime(0)
+  tsk_due_time_date           DateTime? 
   tsk_is_time_defined_by_user Boolean
-  tsk_created_on              DateTime  @db.DateTime(0)
-  tsk_modified_on             DateTime? @db.DateTime(0)
-  tsk_complete_on             DateTime? @db.DateTime(0)
+  tsk_created_on              DateTime  @default(now())
+  tsk_modified_on             DateTime? @default(now())
+  tsk_complete_on             DateTime? @default(now())
   tsk_created_by              Int
   tsk_is_active               Boolean
   comment                     comment[]
-  project                     project   @relation(fields: [tsk_project_id], references: [proj_id], onUpdate: Restrict, map: "task_project_proj_id_fk")
-  status                      status    @relation(fields: [tsk_status_id], references: [stat_id], onUpdate: Restrict, map: "task_status_stat_id_fk")
-  user                        user      @relation(fields: [tsk_created_by], references: [usr_id], onUpdate: Restrict, map: "task_user_usr_id_fk")
+  project                     project   @relation(fields: [tsk_project_id], references: [proj_id], onUpdate: Restrict)
+  status                      status    @relation(fields: [tsk_status_id], references: [stat_id], onUpdate: Restrict)
+  user                        user      @relation(fields: [tsk_created_by], references: [usr_id], onUpdate: Restrict)
 
   @@index([tsk_project_id], map: "task_project_proj_id_fk")
   @@index([tsk_status_id], map: "task_status_stat_id_fk")
@@ -88,13 +88,13 @@ model task {
 
 model user {
   usr_id            Int               @id
-  usr_name          String            @db.VarChar(30)
-  usr_username      String            @db.VarChar(30)@unique
-  usr_password      String            @db.VarChar(35)
-  usr_email         String            @db.VarChar(30)
-  usr_creation_date DateTime          @db.DateTime(0)
-  usr_last_login    DateTime          @db.DateTime(0)
-  usr_is_active     DateTime          @db.DateTime(0)
+  usr_name          String            
+  usr_username      String            @unique
+  usr_password      String            
+  usr_email         String            
+  usr_creation_date DateTime          @default(now())
+  usr_last_login    DateTime          @default(now())
+  usr_is_active     DateTime          @default(now())
   comment           comment[]
   profile_picture   profile_picture[]
   project           project[]
