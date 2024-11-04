@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from './_components/ui/button';
-import { Card, CardHeader,CardContent } from './_components/ui/card';
+import { Button } from '../_components/ui/button';
+import { Card, CardHeader,CardContent } from '../_components/ui/card';
 
 // Sample task data
 const tasks = [
@@ -9,7 +9,7 @@ const tasks = [
   { id: 3, title: 'Task 3', description: 'Description for Task 3' },
 ];
 
-const BacklogPage: React.FC = () => {
+const Backlog: React.FC = () => {
   return (
     <div className="p-4 bg-gray-900 text-white">
       <CardHeader className="text-2xl font-bold mb-4">Backlog</CardHeader>
@@ -26,4 +26,4 @@ const BacklogPage: React.FC = () => {
   );
 };
 
-export default BacklogPage;
+export default Backlog;
