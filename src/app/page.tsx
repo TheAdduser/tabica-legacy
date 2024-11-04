@@ -5,7 +5,7 @@ import KanbanBoard from "./_components/KanbanBoard";
 import Footer from "./_components/Footer";
 
 
-const Home: React.FC =(props) => {
+const Kanban: React.FC =(props) => {
   return(
     <div className="flex flex-col h-screen bg-gray-900">
       <Header/>
@@ -23,4 +23,4 @@ const Home: React.FC =(props) => {
    );
  };
  
- export default Home;
+ export default Kanban;
