@@ -4,6 +4,9 @@ import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "~/trpc/react";
+import Header from "./_components/Header";
+import Sidebar from "./_components/Sidebar";
+import Footer from "./_components/Footer";
 
 export const metadata: Metadata = {
   title: "Tabica",
@@ -17,8 +20,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-        
+        <TRPCReactProvider>
+          <Header />
+          <div className="flex flex-grow">
+            <Sidebar />
+            <main className="flex-grow">{children}</main>
+          </div>
+          <Footer />
+        </TRPCReactProvider>
       </body>
     </html>
   );
