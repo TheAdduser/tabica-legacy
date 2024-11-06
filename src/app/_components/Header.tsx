@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 const Header: React.FC = () => {
   return (
     <header className="flex justify-between items-center p-4 bg-gray-700 text-white">
-      <h1 className="text=x1 font-bold"> Tab[i]ca</h1>
+      <h1 className="text=x1 font-bold"> Tab[<span className="text-green-300">i</span>]ca</h1>
       <div>
         <Button>Sign In </Button> 
       </div>
