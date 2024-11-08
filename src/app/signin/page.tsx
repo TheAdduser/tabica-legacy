@@ -4,6 +4,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import Link from "next/link";
 import { Button } from "../_components/ui/button";
 import { Input } from "../_components/ui/input";
 import { Card, CardHeader, CardContent, CardTitle } from "../_components/ui/card";
@@ -25,8 +26,8 @@ const SignIn: React.FC = () => {
   const onSubmit = (data: any) => {
     console.log(data);
     // Handle sign-in logic here
-
   };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
       <Card className="w-full max-w-md p-4 bg-gray-800 border-black rounded shadow">
@@ -63,10 +64,16 @@ const SignIn: React.FC = () => {
                 <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
               )}
             </div>
-            <Button type="submit" className="w-full mt-4 bg-blue-600 text-white rounded px-4 py-2">
+            <Button type="submit" className="w-full mt-4 rounded px-4 py-2">
               Sign In
             </Button>
           </form>
+          <div className="mt-4 text-center text-white">
+            If it's your first time here, create an {" "}
+            <Link href="/create-account">
+               <span className="underline text-green-300">account</span>
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
