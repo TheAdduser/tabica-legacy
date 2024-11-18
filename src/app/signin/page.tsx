@@ -25,11 +25,13 @@ const SignIn: React.FC = () => {
 
   const onSubmit = (data: any) => {
     console.log(data);
+    // Handle sign-in logic here
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <Card className="w-full max-w-md p-4 bg-gray-800 border-black rounded shadow">
+    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-800 via-green-600 to-green-300 text-white">
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <Card className="relative w-full max-w-md p-4 bg-gray-800 border-black rounded shadow">
         <CardHeader>
           <CardTitle className="text-center text-2xl font-bold text-white">Sign In</CardTitle>
         </CardHeader>

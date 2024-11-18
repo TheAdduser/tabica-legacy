@@ -18,7 +18,9 @@ const Sidebar: React.FC = () => {
           </Link>
         </li>
         <li className="mb-2">
-          <Button>Account</Button>
+          <Link href="/account">
+            <Button>Account</Button>
+          </Link>
         </li>
         <li className="mb-2 mt-5">
           <Button>Add Task</Button>
