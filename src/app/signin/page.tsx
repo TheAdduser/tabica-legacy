@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
 import { Button } from "../_components/ui/button";
 import { Input } from "../_components/ui/input";
 import { Card, CardHeader, CardContent, CardTitle } from "../_components/ui/card";
@@ -23,9 +24,18 @@ const SignIn: React.FC = () => {
     resolver: zodResolver(signInSchema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    // Handle sign-in logic here
+  const onSubmit = async (data: any) => {
+    const result = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
+
+    if (result?.error) {
+      console.error(result.error);
+    } else {
+      window.location.href = "/";
+    }
   };
 
   return (
