@@ -10,10 +10,9 @@ import { Input } from "../_components/ui/input";
 import { Card, CardHeader, CardContent, CardTitle } from "../_components/ui/card";
 
 const registerSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  username: z.string().min(1, 'Username is required'),
   email: z.string().email('Invalid email address'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
+  username: z.string().min(1, 'Username is required'),
 });
 
 const Register: React.FC = () => {
@@ -26,8 +25,24 @@ const Register: React.FC = () => {
   });
 
   const onSubmit = async (data: any) => {
-    // Handle registration logic here
-    console.log(data);
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to register');
+      }
+
+      const result = await response.json();
+      console.log('User registered:', result);
+    } catch (error) {
+      console.error('Error registering user:', error);
+    }
   };
 
   return (
@@ -40,17 +55,17 @@ const Register: React.FC = () => {
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-300">
-                Name
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+                Email
               </label>
               <Input
-                id="name"
-                type="text"
-                {...register("name")}
+                id="email"
+                type="email"
+                {...register("email")}
                 className="mt-1 block w-full rounded px-4 py-2 text-black"
               />
-              {errors.name && (
-                <p className="mt-2 text-sm text-red-600">{errors.name.message}</p>
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
               )}
             </div>
             <div className="mb-4">
@@ -65,20 +80,6 @@ const Register: React.FC = () => {
               />
               {errors.username && (
                 <p className="mt-2 text-sm text-red-600">{errors.username.message}</p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
-                Email
-              </label>
-              <Input
-                id="email"
-                type="email"
-                {...register("email")}
-                className="mt-1 block w-full rounded px-4 py-2 text-black"
-              />
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
               )}
             </div>
             <div className="mb-4">

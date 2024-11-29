@@ -5,17 +5,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "../_components/ui/button";
 import { Input } from "../_components/ui/input";
 import { Card, CardHeader, CardContent, CardTitle } from "../_components/ui/card";
 
 const signInSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 const SignIn: React.FC = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -25,16 +26,24 @@ const SignIn: React.FC = () => {
   });
 
   const onSubmit = async (data: any) => {
-    const result = await signIn("credentials", {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-    });
+    try {
+      const response = await fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (result?.error) {
-      console.error(result.error);
-    } else {
-      window.location.href = "/";
+      if (!response.ok) {
+        throw new Error('Failed to sign in');
+      }
+
+      const result = await response.json();
+      console.log('User signed in:', result);
+      router.push('/');
+    } catch (error) {
+      console.error('Error signing in:', error);
     }
   };
 
