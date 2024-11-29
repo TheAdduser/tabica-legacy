@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -9,31 +9,33 @@ import { Button } from "../_components/ui/button";
 import { Input } from "../_components/ui/input";
 import { Card, CardHeader, CardContent, CardTitle } from "../_components/ui/card";
 
-const registrationSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  username: z.string().min(1, "Username is required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
+const registerSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  username: z.string().min(1, 'Username is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-const CreateAccount: React.FC = () => {
+const Register: React.FC = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registrationSchema),
+    resolver: zodResolver(registerSchema),
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    // Handle registration logic here
     console.log(data);
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <Card className="w-full max-w-md p-4 bg-gray-800 border-black rounded shadow">
+    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-800 via-green-600 to-green-300 text-white">
+      <div className="absolute inset-0 bg-black opacity-50"></div>
+      <Card className="relative w-full max-w-md p-4 bg-gray-800 border-black rounded shadow">
         <CardHeader>
-          <CardTitle className="text-center text-2xl font-bold text-white">Create Account</CardTitle>
+          <CardTitle className="text-center text-2xl font-bold text-white">Register</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -94,13 +96,13 @@ const CreateAccount: React.FC = () => {
               )}
             </div>
             <Button type="submit" className="w-full mt-4 rounded px-4 py-2">
-              Create Account
+              Register
             </Button>
           </form>
           <div className="mt-4 text-center text-white">
-            If you already have an account, log in {" "}
+            Already have an account? {" "}
             <Link href="/signin">
-               <span className="underline text-green-300">here</span>
+               <span className="underline text-green-300">Sign in here</span>
             </Link>
           </div>
         </CardContent>
@@ -109,4 +111,4 @@ const CreateAccount: React.FC = () => {
   );
 };
 
-export default CreateAccount;
+export default Register;

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -80,9 +80,9 @@ const SignIn: React.FC = () => {
             </Button>
           </form>
           <div className="mt-4 text-center text-white">
-            If it's your first time here, create an account {" "}
+            If it's your first time here, create an account{" "}
             <Link href="/register">
-               <span className="underline text-green-300">here</span>
+              <span className="underline text-green-300">here</span>
             </Link>
           </div>
         </CardContent>
